@@ -1,0 +1,186 @@
+/*font-family: 'Open Sans', sans-serif;
+*/
+body {
+	font-family: 'Open Sans', sans-serif;
+	background: #ffffff;
+	margin: 1px;
+}
+
+.container {
+	margin:1px 10%;
+	padding:0;
+	border-radius: 10px;
+}
+
+h1 {
+	background: #23272a;
+	margin: 0 0 10px 0;
+	padding: 7%;
+	color:white;
+	border-radius: 5px;
+}
+
+.md h1 {
+    background: none;
+    color: black;
+    padding: 0px;
+    font-size: 25px;
+}
+
+h1.title {
+    text-align: center;
+    font-size: 40px;
+    font-family: 'Sniglet', cursive;
+    font-weight: 400;
+    text-transform: uppercase;
+}
+
+.subreddit {
+	font-size: 50px;
+	width: 90%;
+}
+
+h1, h2 {
+	font-weight: 700;
+}
+
+h2 {
+	font-size: 23px;
+	margin: 0.2%;
+}
+.post {
+	background: #fbfdfb;
+	padding:3%;
+	margin-bottom: 10px;
+	border-radius: 5px;
+	border-left: 10px solid #c9d6df;
+}
+
+.md {
+	text-align: justify-all;
+	color: darkslategrey;
+}
+.mdwrapper {
+	font-size: 18px;
+	display: none;
+}
+
+.user {
+	font-size: 14px;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+.numcomments {
+	font-size: 14px;
+	padding-left: 2px;
+	padding-right: 2px;
+}
+
+button {
+	display: block;
+	margin-top: 5px;
+	margin-left: 2px;
+	border: none;
+	background: #1e2022;
+	padding: 4px 20px;
+	color: #f0f5f9;
+	font-size: 15px;
+	letter-spacing: 1px;
+	word-spacing: 2px;
+	line-height: 1.5;
+	transition-timing-function: linear;
+	transition: background-color 1.5s;
+	border-radius: 12px;
+	outline: none;
+}
+
+input#myInput {
+    width: 100%;
+    margin: auto;
+    margin-bottom: 5px;
+    outline: none;
+    border: 4px solid black;
+    text-align: center;
+    height: 40px;
+    letter-spacing: 1.2px;
+}
+
+button:hover {
+	background-color: lightslategrey;
+}
+
+a{
+	color: deepskyblue;
+}
+
+span.numcomments {
+	color:grey;
+}
+
+.landinglist {
+	list-style:none;
+	padding:0px 20px;
+	margin: 5px;
+}
+
+.dropbtn {
+  cursor: pointer;
+}
+
+.dropdown {
+	position: relative;
+    max-width: 300px;
+    margin: 0 auto;
+}
+
+button.dropbtn {
+    width: 100%;
+    height: 50px;
+    margin: auto;
+	border-radius: 0px;
+}
+
+.dropdown-content {
+	display: none;
+    padding: 1px 10px;
+    margin: auto;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  	z-index: 1;
+  	max-height: 400px;
+  	overflow:scroll;
+  	overflow-x: hidden;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content li:hover {background-color: #f1f1f1}
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+@media only screen and (max-width: 320px) {
+ .subreddit {
+    font-size: 20px;
+ }
+.container {
+    margin: 0px;
+    padding: 0px;
+}
+}
+@media only screen and (min-width: 321px) and (max-width: 700px) {
+.subreddit {
+    font-size: 20px;
+}
+.container {
+    margin: 0px;
+    padding: 10px;
+}
+}
+
+
