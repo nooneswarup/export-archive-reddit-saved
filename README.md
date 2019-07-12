@@ -1,34 +1,37 @@
-<h1>export-archive-reddit-saved</h1>
-a script to pull your Reddit saved posts to view offline, also sorted by subreddits
-<h2>Features</h2>
-<ul>
-  <li>Download reddit saved posts</li>
-  <li>View by categories</li>
-  <li>resync works after saving new posts</li>
-</ul>
+# export-archive-reddit-saved
+Pull your Reddit saved posts to view offline, sorted by subreddits
 
-<h2>How to:</h2>
-<ul>
-  <li>Download/clone all the files</li>
-  <li>Install python3.x and pip install PRAW</li>
-  <li>Add your Reddit credentials to config file</li>
-  <ul>
-    <li>To generate credentials</li>
-    <li>Read the first steps in here => https://github.com/reddit-archive/reddit/wiki/OAuth2-Quick-Start-Example</li>
-  </ul>
-  <li>Run the batch file or compile the script</li>
-  <li>Open the folder created on desktop</li>
-  <li>Browse using the landing page</li>
-</ul>
+## Features
+ * Download reddit saved posts
+ * View by categories
+ * Running again will pull new items
 
-<h3>Known Issue's:</h3>
-<ul>
-  <li>Don't unsave the recent post or resync malfunctions</li>
-  <li>If newly synced posts are from new subs; The new sub doesn't get added to the Filter(search/dropdown)(But can view using HTML file)</li>
-  <li>Comments will be added in the Future due to API limitations</li>
-  <li>Saved comments will also be added, delayed due to styling issues</li>
-</ul>
+## How to:
+
+ * Download or clone repository
+ * Install Python 3 and run `pip[3] install -r requirements.txt`
+ * Add your Reddit credentials to `config.py`
+   * To generate credentials:
+     * Visit this url: https://www.reddit.com/prefs/apps/
+     * Create a new app, name it, select "script"
+     * Optionally add description and "about" url
+     * Can use this as "redirect" url: `http://www.example.com/unused/redirect/uri`
+     * Save the app, copy the public key under the app name and the secret key into `config.py`
+   * User-agent can be something like "Saved posts scraper by /u/[your_username]"
+   * Fill in your username and password
+ * Run the file with `python[3] redditsave.py`
+   * Optionally, run `redditsave.bat` if the above does not work
+ * Open the folder created on desktop
+ * Browse using the landing page
+
+### Known Issues:
+
+ * Unsaving your most recent saved post will cause the re-sync functionality to break
+ * If newly synced posts are from new subs, the new sub doesn't get added to the Filter (search/dropdown), but can be viewed by opening the HTML file
+ * Comments will be added in the future due to API limitations
+ * Saved comments will also be added, delayed due to styling issues
 
 
-<p>Report/Suggest if you find any other issues/modifications</p>
-<p>Be careful using the script; can't assure you if something goes wrong, proceed at your own risk; No liability</p>
+Please open an issue if you find any other issues or have enhancement suggestions.
+
+The contributors of this project claim no responsibility for data losses in your reddit saved posts
