@@ -181,16 +181,13 @@ print(reddit.read_only)
 #get current working directory
 print(os.getcwd())
 file_path =  os.getcwd()
-#get login user name
-loginuser = str(os.getlogin())
-print(loginuser)
 #changing path
-paths = 'C:\\Users\\'+ loginuser +'\\Desktop'
+paths = os.path.join(os.path.expanduser('~'), 'Downloads')
 os.chdir(paths)
 print(os.getcwd())
 print('changing directory to desktop and creating new folder')
-directory = '\\Redditsaved'
-new_path = paths + directory + '\\subs'
+directory = 'Redditsaved'
+new_path = os.path.join(paths, directory, 'subs')
 if not os.path.exists(directory):
     if not os.path.exists(new_path):
         print('making new path')
@@ -291,14 +288,12 @@ else:
     partialfooter('Landing.html', ssub)
 
     #moving landing file to parent folder
-    landingpath = os.getcwd()
+    landingpath = os.path.join(os.getcwd(), 'Landing.html')
     print(landingpath)
-    landingpath += '\\Landing.html'
-    shutil.move('Landing.html' , paths + directory)
+    shutil.move('Landing.html' , os.path.join(paths, directory))
     os.chdir("../..")
 
-    sauce = file_path
-    sauce += "\\assets"
-    destination = paths + directory + '\\assets'
+    sauce = os.path.join(file_path, 'assets')
+    destination = os.path.join(paths, directory, 'assets')
     print(destination)
     shutil.copytree(sauce, destination)
