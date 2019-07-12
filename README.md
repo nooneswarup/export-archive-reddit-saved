@@ -9,7 +9,7 @@ Pull your Reddit saved posts to view offline, sorted by subreddits
 ## How to:
 
  * Download or clone repository
- * Install Python 3 and run `pip[3] install requirements.txt`
+ * Install Python 3 and run `pip[3] install -r requirements.txt`
  * Add your Reddit credentials to `config.py`
    * To generate credentials:
      * Visit this url: https://www.reddit.com/prefs/apps/
