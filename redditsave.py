@@ -1,4 +1,4 @@
-import praw, os, config, pickle, shutil
+import praw, os, config, pickle, shutil, pathlib
 from praw.models import Submission
 
 #importing configs and PRAW
@@ -177,27 +177,30 @@ def newrecent():
         postid = str(post.id)
         return postid
 
-print(reddit.read_only)
-#get current working directory
-print(os.getcwd())
-file_path =  os.getcwd()
-#get login user name
-loginuser = str(os.getlogin())
-print(loginuser)
-#changing path
-paths = 'C:\\Users\\'+ loginuser +'\\Desktop'
-os.chdir(paths)
-print(os.getcwd())
-print('changing directory to desktop and creating new folder')
-directory = '\\Redditsaved'
-new_path = paths + directory + '\\subs'
-if not os.path.exists(directory):
-    if not os.path.exists(new_path):
-        print('making new path')
-        os.makedirs(new_path)
-os.chdir(new_path)
+#work only if this statement is true #print(reddit.read_only)
+
+#path to this python file
+file_path = pathlib.Path(__file__).resolve()
+print('The current working directory is:')
 print(os.getcwd())
 
+home_path =  pathlib.Path().home()
+Downloads = home_path / 'Downloads'
+
+os.chdir(Downloads)
+print('Changed the current working directory to:')
+print(os.getcwd())
+
+parent_path = Downloads / 'Redditsaved'
+child_path = parent_path / 'subs'
+
+if not os.path.exists(parent_path):
+    if not os.path.exists(child_path):
+        print('making new path')
+        os.makedirs(child_path)
+
+os.chdir(child_path)
+print(os.getcwd())
 
 #check if file exits #if exists
 if (os.path.isfile('sync.p')):
@@ -291,14 +294,10 @@ else:
     partialfooter('Landing.html', ssub)
 
     #moving landing file to parent folder
-    landingpath = os.getcwd()
-    print(landingpath)
-    landingpath += '\\Landing.html'
-    shutil.move('Landing.html' , paths + directory)
-    os.chdir("../..")
+    shutil.move('Landing.html', parent_path)
+    os.chdir(parent_path)
 
-    sauce = file_path
-    sauce += "\\assets"
-    destination = paths + directory + '\\assets'
-    print(destination)
+    #copying assets to output
+    sauce = file_path.parent / 'assets'
+    destination = parent_path / 'assets'
     shutil.copytree(sauce, destination)
