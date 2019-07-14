@@ -21,7 +21,7 @@ Pull your Reddit saved posts to view offline, sorted by subreddits
    * Fill in your username and password
  * Run the file with `python[3] redditsave.py`
    * Optionally, run `redditsave.bat` if the above does not work
- * Open the folder created on desktop
+ * Check for folder named "Redditsaved" in Downloads
  * Browse using the landing page
 
 ### Known Issues:
