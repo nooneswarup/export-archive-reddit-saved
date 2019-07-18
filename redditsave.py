@@ -1,3 +1,4 @@
+#import required modules
 import praw, os, config, pickle, shutil, pathlib
 from praw.models import Submission
 
@@ -7,91 +8,15 @@ reddit = praw.Reddit(client_id=config.client_id,
                      user_agent=config.user_agent,
                      username=config.username,
                      password=config.password)
-#testing these functions
-def runn(post):
-    if isinstance(post, Submission):
-            print('Post', post.id)
-            sub = str(post.subreddit)
-            file_name = sub + '.html'
-            partialhead(file_name, sub, '../assets/css/style.css')
-            h=open(file_name, 'a', encoding="utf-8")
-            h.write(Rh(Rs(post.subreddit_name_prefixed,'s'),1) + "\n")
-            # subs.append(sub)
-            post = newsyncpost(post)
-            h.write(post)
-            h.close()
 
-def newsyncpost(post):
-    print('Inside newsyncpost function')
-    title = Rh(post.title,2)
-    author = Rs('posted by: u/' + str(post.author) ,'u')
-    num_comments = Rs(str(post.num_comments) + ' comments', 'c')
-    post_url = Ra(post.url, '(source)')
-    item_num = str(post.id)
-
-    if(post.selftext_html != None):
-        value = post.selftext_html
-    else:
-        value = '<p>NO BODY FOR THE POST</p>'
-
-    new_post = """<div class="post">
-{0}
-{1}
-{2}
-{3}
-<button onclick="toggles('{4}')">View full post</button>
-<div id="{5}" class="mdwrapper">
-{6}
-</div>
-</div>
-    """
-
-    write_post = new_post.format(title, author, num_comments, post_url, item_num, item_num, value)
-    print(write_post)
-    return write_post
-
-def rerun(post):
-    #check if sub file exists
-    new_sub_list = []
-    print('Inside rerun function')
-    print(post)
-    print(os.getcwd())
-    print(post.subreddit)
-    sub = str(post.subreddit) + ".html"
-    if (os.path.isfile(sub)):
-        #if file exists then append new post
-        f = open(sub, 'r', encoding="utf-8")
-        contents = f.readlines()
-        f.close()
-        #add new_post function
-        new_post = newsyncpost(post)
-        print('return post html')
-        contents.insert(12, new_post)
-
-        f = open(sub, 'w', encoding="utf-8")
-        contents = "".join(contents)
-        f.write(contents)
-        f.close()
-    else:
-        print('New sub detected, creating new file')
-        runn(post)
-        new_sub_list.append(str(post.subreddit))
-        print(new_sub_list)
-    return new_sub_list
-
-#functions
-def Rh(data,num):
+#Functions
+def Head_tag(data,num):
     num = str(num)
     data = str(data)
     data = '<h'+ num +'>'+ data + '</h'+num+'>'
     return data
 
-def Rp(data):
-    data = str(data)
-    data = '<p>'+ data +'</p>'
-    return data
-
-def Rs(data,c):
+def Span_tag(data,c):
     data = str(data)
     if c == 's':
         classid = 'class = "subreddit"'
@@ -104,79 +29,135 @@ def Rs(data,c):
     data = '<span '+ classid +'>'+ data +' </span>'
     return data
 
-def Ra(data, source):
+def Anchor_tag(data, source):
     data = str(data)
     data = '<a href="' + data + '" target="_blank">'+ source + '</a>'
     return data
 
-def partialhead(file_name,title, ref_path):
-    file_name = str(file_name)
-    f = open(file_name, 'a', encoding="utf-8")
-    l1 = '<!DOCTYPE html>'
-    l2 = '<html>'
-    l3 = '<head>'
-    l4 = '    <meta charset="utf-8">'
-    l5 = '    <meta name="viewport" content="width=device-width, initial-scale=1.0">'
-    l6 = '    <title>'+ str(title) +'</title>'
-    l7 = '    <link href="https://fonts.googleapis.com/css?family=Sniglet|Open+Sans:400,700&display=swap" rel="stylesheet">'
-    l8 = '    <link rel="stylesheet" href="' + ref_path + '">'
-    l9 = '</head>'
-    l10 = '<body>'
-    l11= '    <div class="container">'
-    lines = [l1,l2,l3,l4,l5,l6,l7,l8,l9,l10,l11]
-    f.writelines("%s\n" % l for l in lines)
-    f.close()
-
-def partialfooter(file_name, ssub):
-    file_name = str(file_name)
-    f = open(file_name, 'a', encoding="utf-8")
-    l1 = '    <div class="dropdown">'
-    l2 = '        <input type="text" id="myInput" onkeyup="filterlist()" placeholder="Search here.." title="Search for subs">'
-    l3 = '        <button class= "dropbtn">Subreddits</button>'
-    l4 = '        <div class="dropdown-content">'
-    l5 = '        <ul class="landinglist" id ="filterlist">'
-    lines = [l1,l2,l3,l4,l5]
-    f.writelines("%s\n" % l for l in lines)
-    for a in ssub:
-        print(a)
-        h = open(a+ '.html', 'a', encoding="utf-8")
-        h.write('</div>' + '\n')
-        h.write('<script src="../assets/js/script.js"></script>' + "\n")
-        h.write('</body></html>')
-        h.close()
-        l6 = '<li>' + Ra("subs/"+ a + ".html", 'r/' + a)+ '</li>' + "\n"
-        f.write(l6)
-    l7 = '        </ul>'
-    l8 = '</div></div></div>'
-    l9 = '<script src="assets/js/script.js"></script>'
-    l10 = '</body></html>'
-    lines = [l7,l8,l9,l10]
-    f.writelines("%s\n" % l for l in lines)
-    f.close()
-
 def syncload():
     with open('sync.p', 'rb') as h:
         recent_id = str(pickle.load(h))
-        print('Now loading recently saved id:')
-        print(recent_id)
+        print('Last saved ID:', recent_id)
         return recent_id
         h.close()
 
-def syncdump(postid):
+def syncdump(submissionid):
     with open('sync.p','wb') as f:
-        print('updating most recent id:')
-        print(postid)
-        pickle.dump(postid, f)
+        print('Updating Last saved  Id:', submissionid)
+        pickle.dump(submissionid, f)
         f.close()
 
 def newrecent():
     saved = reddit.user.me().saved(limit=1)
-    for post in saved:
-        print('recent id:')
-        print(post.id)
-        postid = str(post.id)
-        return postid
+    for submission in saved:
+        print('Recent id:')
+        print(submission.id)
+        submissionid = str(submission.id)
+        return submissionid
 
+def partialhead(file_name,title, ref_path):
+    file_name = str(file_name)
+    title = str(title)
+    with open(file_name, 'a', encoding="utf-8") as f:
+        data = """<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{0}</title>
+    <link href="https://fonts.googleapis.com/css?family=Sniglet|Open+Sans:400,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{1}">
+</head>
+<body>
+    <div class="container">"""
+        data = data.format(title, ref_path)
+        f.write(data)
+
+def runn(submission):
+    #if the submission is a post
+    if isinstance(submission, Submission):
+            print('Post', submission.id)
+            sub = str(submission.subreddit)
+            file_name = sub + '.html'
+            partialhead(file_name, sub, '../assets/css/style.css')
+            with open(file_name, 'a', encoding="utf-8") as h:
+                h.write(Head_tag(Span_tag(submission.subreddit_name_prefixed,'s'),1) + "\n")
+                submission = newsyncsubmission(submission)
+                h.write(submission)
+
+def newsyncsubmission(submission):
+    title = Head_tag(submission.title,2)
+    author = Span_tag('posted by: u/' + str(submission.author) ,'u')
+    num_comments = Span_tag(str(submission.num_comments) + ' comments', 'c')
+    submission_url = Anchor_tag(submission.url, '(source)')
+    item_num = str(submission.id)
+    if(submission.selftext_html != None):
+        value = submission.selftext_html
+    else:
+        value = '<p>NO BODY FOR THE POST</p>'
+
+    new_submission = """<div class="post">
+{0}
+{1}
+{2}
+{3}
+<button onclick="toggles('{4}')">View full post</button>
+<div id="{5}" class="mdwrapper">
+{6}
+</div>
+</div>
+    """
+    write_submission = new_submission.format(title, author, num_comments, submission_url, item_num, item_num, value)
+    print(write_submission)
+    return write_submission
+
+def partialfooter(file_name, ssub):
+    file_name = str(file_name)
+    with open(file_name, 'a', encoding="utf-8") as f:
+        l1 = '    <div class="dropdown">'
+        l2 = '        <input type="text" id="myInput" onkeyup="filterlist()" placeholder="Search here.." title="Search for subs">'
+        l3 = '        <button class= "dropbtn">Subreddits</button>'
+        l4 = '        <div class="dropdown-content">'
+        l5 = '        <ul class="landinglist" id ="filterlist">'
+        lines = [l1,l2,l3,l4,l5]
+        f.writelines("%s\n" % l for l in lines)
+        for a in ssub:
+            print(a)
+            with open(a + '.html', 'a', encoding="utf-8") as h:
+                h.write('</div>' + '\n')
+                h.write('<script src="../assets/js/script.js"></script>' + "\n")
+                h.write('</body></html>')
+            l6 = '<li>' + Anchor_tag("subs/"+ a + ".html", 'r/' + a)+ '</li>' + "\n"
+            f.write(l6)
+        l7 = '        </ul>'
+        l8 = '</div></div></div>'
+        l9 = '<script src="assets/js/script.js"></script>'
+        l10 = '</body></html>'
+        lines = [l7,l8,l9,l10]
+        f.writelines("%s\n" % l for l in lines)
+
+def rerun(submission):
+    #check if sub file exists
+    new_sub_list = []
+    print(submission.subreddit)
+    sub = str(submission.subreddit) + ".html"
+    if (os.path.isfile(sub)):
+        #if file exists then append new submission
+        with open(sub, 'r', encoding="utf-8") as f:
+            contents = f.readlines()
+            new_submission = newsyncsubmission(submission)
+            contents.insert(11, new_submission)
+        with open(sub, 'w', encoding="utf-8") as f:
+            contents = "".join(contents)
+            f.write(contents)
+    else:
+        print('Post saved on new subreddit: creating new file')
+        runn(submission)
+        new_sub_list.append(str(submission.subreddit))
+        print(new_sub_list)
+    return new_sub_list
+
+#Paths
 #work only if this statement is true #print(reddit.read_only)
 
 #path to this python file
@@ -191,6 +172,7 @@ os.chdir(Downloads)
 print('Changed the current working directory to:')
 print(os.getcwd())
 
+
 parent_path = Downloads / 'Redditsaved'
 child_path = parent_path / 'subs'
 
@@ -202,25 +184,22 @@ if not os.path.exists(parent_path):
 os.chdir(child_path)
 print(os.getcwd())
 
-#check if file exits #if exists
+#checking if the program is syncing or for the first time
+#if sync id exits
 if (os.path.isfile('sync.p')):
-    #if true get id
-    print('Syncing')
+    print('Syncing new submissions')
     recent_id = syncload()
-    #compare with new id
     saved = reddit.user.me().saved(limit=1000)
-    for post in saved:
-        postid = str(post.id)
-        print('Processing post with id:')
-        print(postid)
-        if(recent_id == postid):
-            #if compare is true break
-            print('No new posts: terminating sync')
+    for submission in saved:
+        submission_id = str(submission.id)
+        print('Processing new submission with ID:' + submission_id)
+        if(recent_id == submission_id):
+            #if compare is true break: In perfect sync
+            print('No new submissions: Terminating sync')
             break;
         else:
-            print('Syncing this id')
-            new_subs = rerun(post)
-            print('worked')
+            print('Sync in progress')
+            new_subs = rerun(submission)
             print(new_subs)
             for a in new_subs:
                 print(a)
@@ -233,54 +212,51 @@ if (os.path.isfile('sync.p')):
     new_first= newrecent()
     syncdump(new_first)
 
-#if file does not exists #proram runs for first time and creates the file
+#If sync.p does not exist, the program is running for the first time
 else:
-    postid = newrecent()
-    syncdump(postid)
+    submission_id = newrecent()
+    syncdump(submission_id)
     # generating a listing generator PRAW to get all savd items
     saved = reddit.user.me().saved(limit=1000)
     # counter for total number of saved items
     item_num = 0
     #all sub reddits list
     subs = []
-    allpostids =[]
+    allsubmissionids =[]
 
     #landing page header and h1
-    f = open('Landing.html', 'a', encoding="utf-8")
-    partialhead('Landing.html', 'Reddit is saved', 'assets/css/style.css')
-    f.write('<h1 class="title">"Reddit is saved"</h1>')
-    f.close()
+    with open('Landing.html', 'a', encoding="utf-8") as f:
+        partialhead('Landing.html', 'Reddit is saved', 'assets/css/style.css')
+        f.write('<h1 class="title">"Reddit is saved"</h1>')
 
     #looping through all saved items
-    for post in saved:
+    for submission in saved:
             item_num += 1
-            allpostids.append(str(post.id))
-            if isinstance(post, Submission):
+            allsubmissionids.append(str(submission.id))
+            if isinstance(submission, Submission):
                 print('Post', item_num)
-                sub = str(post.subreddit)
+                sub = str(submission.subreddit)
                 file_name = sub + '.html'
-                h=open(file_name, 'a', encoding="utf-8")
-                if sub in subs:
-                    print('sub exists, appending')
-                else:
-                    #sub files append
-                    partialhead(file_name, sub, '../assets/css/style.css')
-                    h.write(Rh(Rs(post.subreddit_name_prefixed,'s'),1) + "\n")
-                    subs.append(sub)
-                h.write('<div class="post">' + '\n')
-                h.write(Rh(post.title,2) + '\n')
-                h.write(Rs('posted by: u/' + str(post.author) ,'u'))
-                h.write(Rs(str(post.num_comments) + ' comments', 'c'))
-                h.write(Ra(post.url, '(source)') + '\n')
-                h.write('<button onclick="toggles('+ str(item_num) +')">View full post</button>')
-                h.write('<div id="'+ str(item_num) +'" class="mdwrapper">')
-                if(post.selftext_html != None):
-                    h.write(post.selftext_html)
-                else:
-                    h.write('<p>NO BODY FOR THE POST</p>')
-                h.write('</div>')
-                h.write('\n</div>\n')
-                h.close()
+                with open(file_name, 'a', encoding="utf-8") as h:
+                    if sub in subs:
+                        print('sub exists, appending')
+                    else:
+                        #sub files append
+                        partialhead(file_name, sub, '../assets/css/style.css')
+                        h.write(Head_tag(Span_tag(submission.subreddit_name_prefixed,'s'),1) + "\n")
+                        subs.append(sub)
+                    h.write('<div class="post">' + '\n')
+                    h.write(Head_tag(submission.title,2) + '\n')
+                    h.write(Span_tag('posted by: u/' + str(submission.author) ,'u'))
+                    h.write(Span_tag(str(submission.num_comments) + ' comments', 'c'))
+                    h.write(Anchor_tag(submission.url, '(source)') + '\n')
+                    h.write('<button onclick="toggles('+ str(item_num) +')">View full post</button>')
+                    h.write('<div id="'+ str(item_num) +'" class="mdwrapper">')
+                    if(submission.selftext_html != None):
+                        h.write(submission.selftext_html)
+                    else:
+                        h.write('<p>NO BODY FOR THE SUBMISSION</p>')
+                    h.write('</div>\n</div>\n')
 
             else:
                 print('comment will do something later')
@@ -293,7 +269,7 @@ else:
     #landing page footer content and subs files foter
     partialfooter('Landing.html', ssub)
 
-    #moving landing file to parent folder
+    #moving landing page to parent folder
     shutil.move('Landing.html', parent_path)
     os.chdir(parent_path)
 
