@@ -8,13 +8,13 @@ So this project aims to download your Reddit saved posts, and also sort them by 
  * Running again will download newly saved posts
 
 ## How to:
-For Video Guide `https://www.reddit.com/user/freeezer98/comments/ccn8dd/how_to_download_reddit_saved_posts_using_this/`
+For Video Guide [see here](https://www.reddit.com/user/freeezer98/comments/ccn8dd/how_to_download_reddit_saved_posts_using_this/)
 
  * Download or clone repository
  * Install Python 3 and run `pip[3] install -r requirements.txt`
  * Add your Reddit credentials to `config.py`
    * To generate credentials:
-     * Visit this url: https://www.reddit.com/prefs/apps/
+     * Visit this [url](https://www.reddit.com/prefs/apps/)
      * Create a new app, name it, select "script"
      * Optionally add description and "about" url
      * Can use this as "redirect" url: `http://www.example.com/unused/redirect/uri`
