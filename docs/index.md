@@ -7,8 +7,10 @@ So this project aims to download your Reddit saved posts, and also sort them by 
  * View by categories (subreddits)
  * Running again will download newly saved posts
 
-## How to:
+## How to use
 For Video Guide [see here](https://www.reddit.com/user/freeezer98/comments/ccn8dd/how_to_download_reddit_saved_posts_using_this/)
+
+Follow these steps:
 
  * Download or clone repository
  * Install Python 3 and run `pip[3] install -r requirements.txt`
@@ -26,14 +28,8 @@ For Video Guide [see here](https://www.reddit.com/user/freeezer98/comments/ccn8d
  * Check for folder named "Redditsaved" in Downloads
  * Browse using the landing page
 
-### Known Issues:
 
- * Unsaving your most recent saved post will cause the re-sync functionality to break
- * If newly synced posts are from new subs, the new sub doesn't get added to the Filter (search/dropdown), but can be viewed by opening the HTML file
- * Comments will be added in the future due to API limitations
- * Saved comments will also be added, delayed due to styling issues
+Please open an issue if you find any other issues or have suggestions. 
+Feel free to contribute to this project. If you are good at web designing, Feel free to improve the site-design. 
 
-
-Please open an issue if you find any other issues or have enhancement suggestions.
-
-The contributors of this project claim no responsibility for data losses in your reddit saved posts
+The contributors of this project claim no responsibility for data losses in your reddit saved posts.
