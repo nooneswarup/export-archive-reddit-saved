@@ -1,12 +1,14 @@
-# export-archive-reddit-saved
-Pull your Reddit saved posts to view offline, sorted by subreddits
+# Export/Download/Archive Reddit
+Many of us use Reddit and save a lot of content. But you should know that Reddit has a limit of 1000 for your saved content. After you pass this limit, you will lose your earliest saved posts.
+So this project aims to download your Reddit saved posts, and also sort them by subreddits.
 
 ## Features
- * Download reddit saved posts
- * View by categories
- * Running again will pull new items
+ * Download Reddit saved posts
+ * View by categories (subreddits)
+ * Running again will download newly saved posts
 
 ## How to:
+For Video Guide `https://www.reddit.com/user/freeezer98/comments/ccn8dd/how_to_download_reddit_saved_posts_using_this/`
 
  * Download or clone repository
  * Install Python 3 and run `pip[3] install -r requirements.txt`
