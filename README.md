@@ -24,7 +24,7 @@ Pull your Reddit saved posts to view offline, sorted by subreddits
  * Check for folder named "Redditsaved" in Downloads
  * Browse using the landing page
 
-# For Video Guide [see here](https://www.reddit.com/user/freeezer98/comments/ccn8dd/how_to_download_reddit_saved_posts_using_this/)
+#### For Video Guide [see here](https://www.reddit.com/user/freeezer98/comments/ccn8dd/how_to_download_reddit_saved_posts_using_this/)
 
 ### Known Issues:
 
