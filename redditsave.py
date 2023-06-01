@@ -1,6 +1,7 @@
 #import required modules
 import praw, os, config, pickle, shutil, pathlib
 from praw.models import Submission
+from praw.models import Comment
 
 #importing configs and PRAW
 reddit = praw.Reddit(client_id=config.client_id,
@@ -86,15 +87,26 @@ def runn(submission):
                 h.write(submission)
 
 def newsyncsubmission(submission):
-    title = Head_tag(submission.title,2)
-    author = Span_tag('posted by: u/' + str(submission.author) ,'u')
-    num_comments = Span_tag(str(submission.num_comments) + ' comments', 'c')
-    submission_url = Anchor_tag(submission.url, '(source)')
-    item_num = str(submission.id)
-    if(submission.selftext_html != None):
-        value = submission.selftext_html
-    else:
-        value = '<p>NO BODY FOR THE POST</p>'
+    if isinstance(submission, Submission):
+        title = Head_tag(submission.title,2)
+        author = Span_tag('posted by: u/' + str(submission.author) ,'u')
+        num_comments = Span_tag(str(submission.num_comments) + ' comments', 'c')
+        submission_url = Anchor_tag(submission.url, '(source)')
+        item_num = str(submission.id)
+        if(submission.selftext_html != None):
+            value = submission.selftext_html
+        else:
+            value = '<p>NO BODY FOR THE POST</p>'
+    elif isinstance(submission, Comment):
+        title = Head_tag(submission.link_title,2)
+        author = Span_tag('posted by: u/' + str(submission.author) ,'u')
+        num_comments = Span_tag(str(submission.num_comments) + ' comments', 'c')
+        submission_url = Anchor_tag(submission.permalink, '(source)')
+        item_num = str(submission.id)
+        if(submission.body_html != None):
+            value = submission.body_html
+        else:
+            value = '<p>NO BODY FOR THE POST</p>'
 
     new_submission = """<div class="post">
 {0}
@@ -165,21 +177,31 @@ file_path = pathlib.Path(__file__).resolve()
 print('The current working directory is:')
 print(os.getcwd())
 
-home_path =  pathlib.Path().home()
-Downloads = home_path / 'Downloads'
-
-os.chdir(Downloads)
-print('Changed the current working directory to:')
-print(os.getcwd())
-
-
-parent_path = Downloads / 'Redditsaved'
-child_path = parent_path / 'subs'
+# set save directory
+try:
+    # see if save directory set in config.py
+    config.savedir
+    if config.savedir != None:
+        Downloads = pathlib.PosixPath(config.savedir)
+        parent_path = Downloads
+        child_path = parent_path / 'subs'
+    else:
+        home_path =  pathlib.Path().home()
+        Downloads = home_path / Downloads
+        parent_path = Downloads / 'Redditsaved'
+        child_path = parent_path / 'subs'
+except:
+    print('Error setting save directory from config.py')
 
 if not os.path.exists(parent_path):
     if not os.path.exists(child_path):
         print('making new path')
         os.makedirs(child_path)
+
+# I dont see the point of this code.
+os.chdir(Downloads)
+print('Changed the current working directory to:')
+print(os.getcwd())
 
 os.chdir(child_path)
 print(os.getcwd())
@@ -258,10 +280,30 @@ else:
                         h.write('<p>NO BODY FOR THE SUBMISSION</p>')
                     h.write('</div>\n</div>\n')
 
-            else:
-                print('comment will do something later')
+            elif isinstance(submission, Comment):
                 print('Comment', item_num)
-                #see comment only, moved for clutter=>need to edit later
+                sub = str(submission.subreddit)
+                file_name = sub + '.html'
+                with open(file_name, 'a', encoding="utf-8") as h:
+                    if sub in subs:
+                        print('sub exists, appending')
+                    else:
+                        #sub files append
+                        partialhead(file_name, sub, '../assets/css/style.css')
+                        h.write(Head_tag(Span_tag(submission.subreddit_name_prefixed,'s'),1) + "\n")
+                        subs.append(sub)
+                    h.write('<div class="post">' + '\n')
+                    h.write(Head_tag(submission.link_title,2) + '\n')
+                    h.write(Span_tag('posted by: u/' + str(submission.author) ,'u'))
+                    h.write(Span_tag(str(submission.num_comments) + ' comments', 'c'))
+                    h.write(Anchor_tag(submission.permalink, '(source)') + '\n')
+                    h.write('<button onclick="toggles('+ str(item_num) +')">View full post</button>')
+                    h.write('<div id="'+ str(item_num) +'" class="mdwrapper">')
+                    if(submission.body_html!= None):
+                        h.write(submission.body_html)
+                    else:
+                        h.write('<p>NO BODY FOR THE SUBMISSION</p>')
+                    h.write('</div>\n</div>\n')
 
     #sorting all sub reddits alphabetically
     ssub = sorted(subs,key=str.lower)
